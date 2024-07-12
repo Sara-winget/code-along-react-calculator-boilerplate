@@ -1,73 +1,75 @@
-import React, { useState } from "react";
-import "./App.css";
-function Calculator() {
-  const [btnvalue, setBtnValue] = useState("");
-  const handleclick = (val) => {
-    setBtnValue((prevState) => {
-      if (
-        prevState.slice(-1) === "X" ||
-        prevState.slice(-1) === "/" ||
-        prevState.slice(-1) === "-" ||
-        prevState.slice(-1) === "+"
-      ) {
-        handleCalculation();
-        return prevState + val;
-      } else {
-        return prevState + val;
-      }
-    });
-  };
-  const handleDelete = () => {
-    setBtnValue((prevState) => prevState.slice(0, -1));
-  };
-  const handleClear = () => {
-    setBtnValue("");
-  };
-  const handleCalculation = () => {
-    try {
-      setBtnValue((prevState) => eval(prevState.replace(/X/g, "*")).toString());
-    } catch {
-      setBtnValue("Error");
-    }
-  };
+import React from 'react';
+import { useState } from "react";
+function Calculator(){
+  const [display,setDisplay]=useState('');
+  const handleClick=(value)=>{
+    if(value==='=')
+      evaluateExpression();
+    else if(value === 'AC')
+       clearDisplay();
+      else if(value ==='Del')
+        deleteLastDigit();
+      else
+      setDisplay(display+value);
 
-  console.log(btnvalue);
-
-  return (
-    <div className="calculator-page">
-      <div className="calculator">
-        <div className="display">{btnvalue}</div>
-        <div className="row-btn">
-          <button onClick={() => handleclick(7)}>7</button>
-          <button onClick={() => handleclick(8)}>8</button>
-          <button onClick={() => handleclick(9)}>9</button>
-          <button onClick={handleDelete}>del</button>
-          <button onClick={handleClear}>esc</button>
-        </div>
-        <div className="row-btn">
-          <button onClick={() => handleclick(4)}>4</button>
-          <button onClick={() => handleclick(5)}>5</button>
-          <button onClick={() => handleclick(6)}>6</button>
-          <button onClick={() => handleclick("X")}>x</button>
-          <button>/</button>
-        </div>
-        <div className="row-btn">
-          <button onClick={() => handleclick(1)}>1</button>
-          <button onClick={() => handleclick(2)}>2</button>
-          <button onClick={() => handleclick(3)}>3</button>
-          <button onClick={() => handleclick("-")}>-</button>
-          <button onClick={() => handleclick("+")}>+</button>
-        </div>
-        <div className="row-btn">
-          <button onClick={() => handleclick(0)} className="zero">
-            0
-          </button>
-          <button>.</button>
-          <button className="equal">=</button>
-        </div>
-      </div>
-    </div>
-  );
+  }
+  const evaluateExpression=()=>{
+    
+      const result = Function(`return ${display}`)
+      setDisplay(result().toString())
+    
+  }
+  const clearDisplay=()=>{
+    setDisplay('');
+  }
+const deleteLastDigit=()=>{
+  const newDisplay=display.slice(0,-1)
+  setDisplay(newDisplay)
 }
 
-export default Calculator;
+  return (
+    <>
+    <div style={{display:"flex" ,flexDirection:'column' ,height:1500,width:500,marginRight:200}}>
+      <div className="text area">
+        <h1>Calculator</h1>
+        <textarea style={{backgroundColor:'lightgray',color:'black',fontSize:50}}cols={17} rows={10} value={display} readOnly/>
+      </div>
+      <div style={{fontSize:20,fontWeight:'bold'}}>
+        <div className="row1" style={{display:'flex',height:50}}>
+          <div style={{flexGrow:2, border:'1px solid lightBlue',padding:10}} onClick={()=>{handleClick('AC')}}>AC</div>
+          <div style={{border:'1px solid lightBlue',flexGrow:1 ,padding:10}} onClick={()=>{handleClick('Del')}}>Del</div>
+          <div style={{border:'1px solid lightBlue',flexGrow:1 ,padding:10}} onClick={()=>{handleClick('/')}}> / </div>
+        </div>
+        <div style={{display:'flex'}}>
+          <div style={{border:'1px solid lightBlue' ,flexGrow:1 ,padding:10}} onClick={()=>{handleClick('2')}}>2</div>
+          <div style={{border:'1px solid lightBlue' ,flexGrow:1 ,padding:10}} onClick={()=>{handleClick('1')}}>1</div>
+          <div style={{border:'1px solid lightBlue' ,flexGrow:1 ,padding:10}} onClick={()=>{handleClick('3')}}>3</div>
+          <div style={{border:'1px solid lightBlue' ,flexGrow:1 ,padding:10}} onClick={()=>{handleClick('*')}}>*</div>
+        </div>
+        <div style={{display:'flex'}}>
+          <div style={{border:'1px solid lightBlue' ,flexGrow:1 ,padding:10}} onClick={()=>{handleClick('4')}}>4</div>
+          <div style={{border:'1px solid lightBlue' ,flexGrow:1 ,padding:10}} onClick={()=>{handleClick('5')}}>5</div>
+          <div style={{border:'1px solid lightBlue' ,flexGrow:1 ,padding:10}} onClick={()=>{handleClick('6')}}>6</div>
+          <div style={{border:'1px solid lightBlue' ,flexGrow:1 ,padding:10}} onClick={()=>{handleClick('+')}}>+</div>
+        </div>
+        <div style={{display:'flex'}}>
+          <div style={{border:'1px solid lightBlue', flexGrow:1 ,padding:10}} onClick={()=>{handleClick('7')}}>7</div>
+          <div style={{border:'1px solid lightBlue', flexGrow:1 ,padding:10}} onClick={()=>{handleClick('8')}}>8</div>
+          <div style={{border:'1px solid lightBlue', flexGrow:1 ,padding:10}} onClick={()=>{handleClick('9')}}>9</div>
+          <div style={{border:'1px solid lightBlue', flexGrow:1 ,padding:10}} onClick={()=>{handleClick('-')}}>-</div>
+        </div>
+        <div style={{display:'flex'}}>
+          <div style={{border:'1px solid lightBlue',flexGrow:1 ,padding:10}}>.
+            </div>
+          <div style={{border:'1px solid lightBlue',flexGrow:1 ,padding:10}} onClick={()=>{handleClick('0')}}>0</div>
+          <div style={{flexGrow:2,border:'1px solid lightBlue',padding:10}}    
+             onClick={()=>{handleClick('=')}}> = </div>
+        </div>
+
+      </div>
+    </div>
+    </>
+  )
+}
+
+export default Calculator

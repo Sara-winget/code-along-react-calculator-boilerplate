@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import Calculator from './components/Calculator'
+import Calculator from './Component/Calculator'
 function App() {
   
   return (
